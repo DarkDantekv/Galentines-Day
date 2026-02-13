@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Happy Galentine's Day! 💖</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #ffb6c1, #ffe4ec);
+      overflow-x: hidden;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 5s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-600px) rotate(45deg); opacity: 0; }
+    }
+
+    /* Flying animation */
+    @keyframes flyAround {
+      0%   { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(0deg); }
+      25%  { top: 20%; left: 70%; transform: translate(-50%, -50%) rotate(45deg); }
+      50%  { top: 70%; left: 80%; transform: translate(-50%, -50%) rotate(-30deg); }
+      75%  { top: 40%; left: 10%; transform: translate(-50%, -50%) rotate(60deg); }
+      100% { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(0deg); }
+    }
+
+    #heart.flying {
+      animation: flyAround 6s ease-in-out infinite;
+    }
+
+    /* Card container */
+    .card {
+      position: relative;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Video */
+    video {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
+      margin: 20px 0;
+    }
+
+    /* Buttons */
+    #playMusicBtn, #surpriseBtn {
+      background: #ff4da6;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 15px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      margin: 10px;
+    }
+    #playMusicBtn:hover, #surpriseBtn:hover {
+      background: #ff1a8c;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      opacity: 0.9;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: confettiFall 1s forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity:1; }
+      100% { transform: translateY(200px) rotate(360deg); opacity:0; }
+    }
+
+    /* Expanding heart */
+    #heart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: url('friend.jpeg') no-repeat center/cover;
+      background-size: cover;
+      transform: translate(-50%, -50%) rotate(45deg);
+      border-radius: 50% 50% 0 0;
+      transition: width 1s ease, height 1s ease;
+      z-index: 10;
+    }
+    #heart.expanded {
+      width: 500px;
+      height: 500px;
+    }
+
+    /* Surprise text */
+    #surpriseText {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #b30059;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="badbunnysong.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Floating hearts script -->
+  <script>
+    function createHearts() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => { heart.remove(); }, 8000);
+    }
+    setInterval(createHearts, 300);
+
+    // Play music button
+    function playMusic() {
+      const music = document.getElementById('bgMusic');
+      music.play();
+      document.getElementById('playMusicBtn').style.display = 'none';
+    }
+
+    // Surprise button
+    function surprise() {
+      const btn = document.getElementById('surpriseBtn');
+      const heart = document.getElementById('heart');
+      const text = document.getElementById('surpriseText');
+      const music = document.getElementById('bgMusic');
+
+      // 1️⃣ Play music (if not already)
+      music.play();
+
+      // 2️⃣ Confetti
+      for(let i=0;i<30;i++){
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = (btn.offsetLeft + btn.offsetWidth/2 + (Math.random()*100-50)) + 'px';
+        confetti.style.background = `hsl(${Math.random()*360}, 70%, 60%)`;
+        document.body.appendChild(confetti);
+        setTimeout(()=>{confetti.remove();}, 1500);
+      }
+
+      // 3️⃣ Hide button & expand heart
+      btn.style.opacity = 0;
+      heart.classList.add('expanded');
+
+      // 4️⃣ Show surprise text
+      text.style.display = "block";
+
+      // 5️⃣ Make heart fly
+      setTimeout(() => {
+        heart.classList.add('flying');
+      }, 1200);
+
+      // Remove button completely
+      setTimeout(()=>{btn.style.display='none';}, 1000);
+    }
+  </script>
+
+  <!-- Card -->
+  <div class="card">
+    <h1>Happy Galentine's Day! 💕</h1>
+
+    <!-- Looping Video -->
+    <video autoplay loop muted>
+      <source src="baileVector.mp4" type="video/mp4">
+    </video>
+
+    <!-- Play Music Button -->
+    <button id="playMusicBtn" onclick="playMusic()">Click to Shake Ass with Vector</button>
+
+
+  <!-- Expanding heart -->
+  <div id="heart"></div>
+
+</body>
+</html>
